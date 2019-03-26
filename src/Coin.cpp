@@ -84,6 +84,9 @@ bool TW::validateAddress(TWCoinType coin, const std::string& string) {
         return Bitcoin::Bech32Address::isValid(string, HRP_LITECOIN) ||
                Bitcoin::Address::isValid(string, {{TWP2PKHPrefixLitecoin}, {TWP2SHPrefixLitecoin}});
 
+    case TWCoinTypeViacoin:
+        return Bitcoin::Bech32Address::isValid(string, HRP_VIACOIN) || Bitcoin::Address::isValid(string, {TWP2PKHPrefixViacoin, TWP2SHPrefixViacoin});
+
     case TWCoinTypeOntology:
         return Ontology::Address::isValid(string);
 
@@ -146,6 +149,7 @@ TWPurpose TW::purpose(TWCoinType coin) {
     case TWCoinTypeTheta:
         return TWPurposeBIP44;
     case TWCoinTypeBitcoin:
+    case TWCoinTypeViacoin:
     case TWCoinTypeLitecoin:
     case TWCoinTypeGroestlcoin:
         return TWPurposeBIP84;
@@ -166,6 +170,7 @@ TWCurve TW::curve(TWCoinType coin) {
     case TWCoinTypeGroestlcoin:
     case TWCoinTypeICON:
     case TWCoinTypeLitecoin:
+    case TWCoinTypeViacoin:
     case TWCoinTypePoa:
     case TWCoinTypeRipple:
     case TWCoinTypeThunderToken:
@@ -198,6 +203,7 @@ TWCurve TW::curve(TWCoinType coin) {
 TWHDVersion TW::xpubVersion(TWCoinType coin) {
     switch (coin) {
     case TWCoinTypeBitcoin:
+    case TWCoinTypeViacoin:
     case TWCoinTypeLitecoin:
     case TWCoinTypeGroestlcoin:
         return TWHDVersionZPUB;
@@ -241,6 +247,7 @@ TWHDVersion TW::xpubVersion(TWCoinType coin) {
 TWHDVersion TW::xprvVersion(TWCoinType coin) {
     switch (coin) {
     case TWCoinTypeBitcoin:
+    case TWCoinTypeViacoin:
     case TWCoinTypeLitecoin:
     case TWCoinTypeGroestlcoin:
         return TWHDVersionZPRV;
@@ -295,6 +302,7 @@ DerivationPath TW::derivationPath(TWCoinType coin) {
     case TWCoinTypeGroestlcoin:
     case TWCoinTypeICON:
     case TWCoinTypeLitecoin:
+    case TWCoinTypeViacoin:
     case TWCoinTypeOntology:
     case TWCoinTypePoa:
     case TWCoinTypeRipple:
@@ -346,6 +354,7 @@ PublicKeyType TW::publicKeyType(TWCoinType coin) {
     case TWCoinTypeDecred:
     case TWCoinTypeGroestlcoin:
     case TWCoinTypeLitecoin:
+    case TWCoinTypeViacoin:
     case TWCoinTypeZcash:
     case TWCoinTypeZcoin:
     case TWCoinTypeRipple:
@@ -424,6 +433,8 @@ std::string TW::deriveAddress(TWCoinType coin, const PublicKey& publicKey) {
 
     case TWCoinTypeLitecoin:
         return Bitcoin::Bech32Address(publicKey, 0, HRP_LITECOIN).string();
+    case TWCoinTypeViacoin:
+        return Bitcoin::Bech32Address(publicKey, 0, HRP_VIACOIN).string();
     case TWCoinTypeOntology:
         return Ontology::Address(publicKey).string();
     case TWCoinTypeNimiq:
